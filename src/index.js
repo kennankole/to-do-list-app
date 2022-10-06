@@ -2,99 +2,113 @@ import _, { add, times } from 'lodash';
 import './style.css';
 
 
-const tasks = [];
-const elemList = [];
 const formContainer = document.getElementById('form')
 const inputElement = document.getElementById('input-element');
 const myContainer = document.getElementById('items-container');
-const clearAll = document.getElementById('footer-a')
-const data = JSON.parse(localStorage.getItem('listItems'));
 
 
-// Add items
-export const toDoList = () => {
-	elemList.push(inputElement.value);
-	const listObj = {
-		description: inputElement.value,
-		completed: false,
-		index: elemList.length,
-	};
+const loadTasks = () => {
+	if (localStorage.getItem("listItems") == null){
+		return;
+	}
+	const toDoList = Array.from(JSON.parse(localStorage.getItem("listItems")));
 
-	tasks.push(listObj);
-	localStorage.setItem('listItems', JSON.stringify(tasks));
-	myContainer.innerHTML += `
-		<li class='list-container'>
-			<div class='list-text'>
-				<input type="checkbox" class="check">
-				${inputElement.value}
-			</div>
-		</li>
-	`;
-	inputElement.value = '';
-	window.location.reload;
-}
-
-
-// Display data
-function showData() {
-	data.forEach((item, index) => {
-		myContainer.innerHTML += `
-	<li class='list-container'>
-		<div class='list-text'>
-			<input type="checkbox" class="check">
-			${item.description}
-		</div>
-	</li>
-	`;
+	toDoList.forEach((item) => {
+		const list = document.createElement("li");
+		list.classList.add('to-do-list-elements')
+		list.innerHTML = `
+			<input type="checkbox" onclick="taskCompleted(this)" class="check">
+			<input type="text" value="${item.description}" class="task ${item.completed ? 'completed' : ''}" onfocus="getCurrentTask(this)" onblur="editTaskItem(this)">
+			<i class="fa fa-trash" onclick='removeItem(this)'></i>
+		`;
+		myContainer.insertBefore(list, myContainer.children[0]);
 	});
 }
 
-if (localStorage.getItem('listItems') !== null) {
-	showData()
-} else {
-	localStorage.setItem('listItems', JSON.stringify(data));
+
+const addToDoItem = () => {
+	let elemList = []
+	if(inputElement.value === ''){
+		return false;
+	}
+	if (document.querySelector(`input[value="${inputElement.value}"]`)){
+		return false;
+	}
+	elemList.push(inputElement.value)
+	localStorage.setItem("listItems", JSON.stringify([...JSON.parse(localStorage.getItem("listItems") || "[]"), { description: inputElement.value, completed: false, index: elemList.length}]));
+
+	const list = document.createElement("li");
+	list.classList.add('to-do-list-elements')
+	list.innerHTML = `
+
+		<input type="checkbox" onclick="taskCompleted(this)" class="check">
+		<input type="text" value="${inputElement.value}" class="task" onfocus="getCurrentTask(this)" onblur="editTaskItem(this)">
+		<i class="fa fa-trash" onclick='removeItem(this)'></i>
+
+	`;
+	myContainer.insertBefore(list, myContainer.children[0]);
+	// clear input
+	inputElement.value = "";
 }
 
-// Check and uncheck items.
-const listItem = document.getElementsByClassName('list-text');
-const checked = document.getElementsByClassName('check');
-const elem = Array.from(checked);
-elem.forEach((item, index) => {
-	item.addEventListener('change', (e) => {
-		console.log(e.currentTarget.checked)
-		if (e.currentTarget.checked) {
-			listItem[index].style.textDecoration = 'line-through';
-		} else {
-			listItem[index].style.textDecoration = 'none';
-		}
-	})
-})
 
-//Delete  items
-const items = Array.from(listItem);
-function deleteItems() {
-	const listElem = document.querySelectorAll('input:checked');
-	if (listElem.length > 0) {
-		items.forEach((item, index) => {
-			if (item.style.textDecoration === 'line-through') {
-				item.remove()
-				document.location.reload(true);
-				data.splice(index, listElem.length)
-				localStorage.setItem('listItems', JSON.stringify(data));
-			} else {
-				return;
-			}
-		})
-	} else {
+
+window.removeItem = function(event){
+	const taskItems = Array.from(JSON.parse(localStorage.getItem("listItems")));
+	taskItems.forEach((item, index) => {
+		if(item.description === event.parentNode.children[0].value){
+			taskItems.splice(index, 1)
+		}
+	});
+	localStorage.setItem("listItems", JSON.stringify(taskItems));
+	event.parentElement.remove();
+	
+}
+let currentTask = null;
+
+window.getCurrentTask = function(event){
+	currentTask = event.value;
+}
+
+window.editTaskItem = function(event) {
+	const taskItem = Array.from(JSON.parse(localStorage.getItem('listItems')));
+	if (event.value === ''){
+		event.value == currentTask;
 		return;
 	}
+
+	taskItem.forEach((item) => {
+		if (item.description === event.value){
+			event.value = currentTask;
+			return;
+		}
+	});
+
+	taskItem.forEach((item) => {
+		if (item.description === currentTask){
+			item.description = event.value;
+		}
+	});
+
+	localStorage.setItem("listItems", JSON.stringify(taskItem));
 }
 
-formContainer.addEventListener('submit', (e) => {
-	e.preventDefault();
-	toDoList();
-});
+window.taskCompleted = function(event) {
+	const taskItems = Array.from(JSON.parse(localStorage.getItem("listItems")));
+	taskItems.forEach((item) => {
+		if (item.description === event.nextElementSibling.value){
+			item.completed = !item.completed;
+		}
+	});
+	localStorage.setItem("listItems", JSON.stringify(taskItems));
+	event.nextElementSibling.classList.toggle("completed")
+}
 
-clearAll.addEventListener('click', deleteItems)
+window.onload = loadTasks;
 
+// Form submit 
+formContainer.addEventListener('submit', (event) => {
+	event.preventDefault();
+	addToDoItem();
+})
 
