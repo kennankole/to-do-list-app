@@ -9,22 +9,18 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 100px;
 }
 
 .list-container {
   margin: 0;
-  width: 100%;
-  padding: 0 15px;
-}
-
-.list-container > li {
   border: 1px solid rgb(36 34 34);
   padding: 10px;
+  box-sizing: border-box;
 }
 
-.to-do-container > ul > li {
+li {
   list-style-type: none;
-  font-size: 1.2rem;
 }
 
 #input-element {
@@ -61,6 +57,19 @@
   color: red;
 }
 
+.list-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+}
+
+#items-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 /*
 #######################################################
 #++++++++++++++++++++++++++++FORM SECTION++++++++++++#
@@ -70,4 +79,10 @@
 form {
   display: flex;
   min-width: 600px;
+  border: 1px solid grey;
+}
+
+input[type="submit"],
+input[type="text"] {
+  border: none;
 }

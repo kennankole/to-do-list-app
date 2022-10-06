@@ -8,15 +8,18 @@
 <script defer src="main.js"></script></head>
 <body>
 	<section class="to-do">
+		<div class="form-container">
+			<form action="./index.html" method="get" id="form">
+				<input type="text" placeholder="Add your list" id="input-element" required></input>
+				<input type="submit">
+			</form>
+		</div>
 		<div class="to-do-container" id="to-do-list">
-			<div class="input-container">
-				<form action="" id="form" method="get">
-					<input type="text" placeholder="Add your list" id="input-element" required></input>
-					<button type="submit">submit</button>
-				</form>
+			<ul id="items-container"></ul>
+			<div class='footer-list'>
+				<a href='#' id='footer-a'>Clear all completed</a>
 			</div>
 		</div>
-		<p class="hello"></p>
 	</section>
 </body>
 </html>
