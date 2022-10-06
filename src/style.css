@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 30px;
+  flex-direction: column;
 }
 
 .list-container {
@@ -27,8 +27,7 @@
   font-size: 1.2rem;
 }
 
-#input-list {
-  flex: 1;
+#input-element {
   padding: 15px;
   width: 100%;
   box-sizing: border-box;
@@ -40,6 +39,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  min-width: 600px;
 }
 
 .footer-list {
@@ -53,6 +53,21 @@
   background-color: #ddd;
 }
 
-.footer-a {
+#footer-a {
   color: black;
+}
+
+.list-items {
+  color: red;
+}
+
+/*
+#######################################################
+#++++++++++++++++++++++++++++FORM SECTION++++++++++++#
+######################################################
+*/
+
+form {
+  display: flex;
+  min-width: 600px;
 }

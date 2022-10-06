@@ -1,70 +1,93 @@
-import _ from 'lodash';
+import _, { times } from 'lodash';
 import './style.css';
 
-const tasks = [
-	{
-		description: 'Go to the GYM',
-		completed: true,
-		index: 0
-	},
-	{
-		description: 'Read ES6 book',
-		completed: true,
-		index: 1
-	},
-	{
-		description: 'Go shopping: ',
-		completed: true,
-		index: 2
-	},
-	{
-		description: 'Wash clothes',
-		completed: true,
-		index: 3
-	},
-	{
-		description: 'Add New Feature to the app',
-		completed: true,
-		index: 4
-	},
-	{
-		description: 'Go camping',
-		completed: true,
-		index: 5
-	},
-	{
-		description: 'Go to church',
-		completed: true,
-		index: 6
-	},
-	{
-		description: 'Cook lunch',
-		completed: true,
-		index: 7
-	},
-	{
-		description: 'Go out',
-		completed: true,
-		index: 8
-	}
+const tasks = [];
+const elemList = [];
 
-]
+const formContainer = document.getElementById('form')
+const inputElement = document.getElementById('input-element');
+const myContainer = document.getElementById('items-container');
+const footerContainer = document.getElementById('to-do-container')
+const clearAll = document.getElementById('footer-a')
 
-const myContainer = document.getElementById('to-do-list');
-tasks.forEach((item) => {
+formContainer.addEventListener('submit', (e) => {
+	e.preventDefault();
+	elemList.push(inputElement.value);
+	const listObj = {
+		description: inputElement.value,
+		completed: false,
+		index: elemList.length,
+	};
+	
+	tasks.push(listObj);
+	localStorage.setItem('listItems', JSON.stringify(tasks));
 	myContainer.innerHTML += `
-	<ul class='list-container'>
-		<li class='list-items'>
-		<input type="checkbox" id="check">
-		${item.description}
+		<li class='list-container'>
+			<div class='list-text'>
+				<input type="checkbox" class="check">
+				${inputElement.value}
+			</div>
 		</li>
-	</ul>
-`;
+	`;
+	inputElement.value = '';
+	window.location.reload;
 });
 
-myContainer.innerHTML += `
-<div class='footer-list'>
-	<a href='#' class='footer-a'>Clear all completed</a>
-</div>
-`;
+
+const data = JSON.parse(localStorage.getItem('listItems'));
+function showData(){
+	data.forEach((item, index) => {
+	myContainer.innerHTML += `
+	<li class='list-container'>
+		<div class='list-text'>
+			<input type="checkbox" class="check">
+			${item.description}
+		</div>
+	</li>
+	`;
+	clearAll.addEventListener('click', () => {
+		deleteItems(index);
+	});
+
+	});
+}
+
+
+
+if (localStorage.getItem('listItems') !== null){
+	showData()
+}else {
+	localStorage.setItem('listItems', JSON.stringify(tasks));
+}
+
+// Check and uncheck items.
+const listItem = document.getElementsByClassName('list-text');
+
+const checked = document.getElementsByClassName('check');
+const elem = Array.from(checked);
+// elem.forEach((item, index) => {
+// 	item.addEventListener('change', (e) => {
+// 		console.log(e.currentTarget.checked)
+// 		if(e.currentTarget.checked){
+// 			listItem[index].style.textDecoration = 'line-through';
+// 			console.log(index)
+// 		}else{
+// 			listItem[index].style.textDecoration = 'none';
+// 		}
+// 	})
+// })
+
+
+
+
+const items = Array.from(listItem);
+
+function deleteItems(index) {
+	data.splice(index, 1)
+	localStorage.setItem('listItems', JSON.stringify(tasks));
+	window.location.reload;
+}
+
+
+// clearAll.addEventListener('click', deleteItems)
 
