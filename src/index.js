@@ -1,10 +1,13 @@
 import _, { add, times } from 'lodash';
+import clearAll from './script';
 import './style.css';
+
 
 
 const formContainer = document.getElementById('form')
 const inputElement = document.getElementById('input-element');
 const myContainer = document.getElementById('items-container');
+const clearSelectedList = document.getElementById('footer-a')
 
 
 const loadTasks = () => {
@@ -56,7 +59,7 @@ const addToDoItem = () => {
 window.removeItem = function(event){
 	const taskItems = Array.from(JSON.parse(localStorage.getItem("listItems")));
 	taskItems.forEach((item, index) => {
-		if(item.description === event.parentNode.children[0].value){
+		if(item.description === event.parentNode.children[1].value){
 			taskItems.splice(index, 1)
 		}
 	});
@@ -64,6 +67,8 @@ window.removeItem = function(event){
 	event.parentElement.remove();
 	
 }
+
+
 let currentTask = null;
 
 window.getCurrentTask = function(event){
@@ -104,6 +109,8 @@ window.taskCompleted = function(event) {
 	event.nextElementSibling.classList.toggle("completed")
 }
 
+
+
 window.onload = loadTasks;
 
 // Form submit 
@@ -111,4 +118,23 @@ formContainer.addEventListener('submit', (event) => {
 	event.preventDefault();
 	addToDoItem();
 })
+
+
+
+clearSelectedList.addEventListener('click', (event) => {
+	const completedTasks = Array.from(document.getElementsByClassName("completed"));
+	completedTasks.forEach((item, index) => {
+		item.parentElement.remove();
+	});
+	clearAll();
+})
+
+// checkboxes = document.getElementsByName("NameOfCheckboxes");
+// selectedCboxes = Array.prototype.slice.call(checkboxes).filter(ch => ch.checked==true);
+
+
+
+
+
+
 
