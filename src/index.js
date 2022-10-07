@@ -1,5 +1,6 @@
 import _, { add, times } from 'lodash';
-import clearAll from './script';
+import { clearAll } from './script.js';
+import taskCompleted from './script.js';
 import './style.css';
 
 
@@ -8,6 +9,7 @@ const formContainer = document.getElementById('form')
 const inputElement = document.getElementById('input-element');
 const myContainer = document.getElementById('items-container');
 const clearSelectedList = document.getElementById('footer-a')
+
 
 
 const loadTasks = () => {
@@ -98,20 +100,10 @@ window.editTaskItem = function(event) {
 	localStorage.setItem("listItems", JSON.stringify(taskItem));
 }
 
-window.taskCompleted = function(event) {
-	const taskItems = Array.from(JSON.parse(localStorage.getItem("listItems")));
-	taskItems.forEach((item) => {
-		if (item.description === event.nextElementSibling.value){
-			item.completed = !item.completed;
-		}
-	});
-	localStorage.setItem("listItems", JSON.stringify(taskItems));
-	event.nextElementSibling.classList.toggle("completed")
-}
-
-
 
 window.onload = loadTasks;
+
+
 
 // Form submit 
 formContainer.addEventListener('submit', (event) => {
@@ -119,8 +111,7 @@ formContainer.addEventListener('submit', (event) => {
 	addToDoItem();
 })
 
-
-
+// Clear all completed tasks
 clearSelectedList.addEventListener('click', (event) => {
 	const completedTasks = Array.from(document.getElementsByClassName("completed"));
 	completedTasks.forEach((item, index) => {
@@ -129,8 +120,7 @@ clearSelectedList.addEventListener('click', (event) => {
 	clearAll();
 })
 
-// checkboxes = document.getElementsByName("NameOfCheckboxes");
-// selectedCboxes = Array.prototype.slice.call(checkboxes).filter(ch => ch.checked==true);
+
 
 
 
