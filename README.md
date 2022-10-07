@@ -19,7 +19,7 @@ Download or fork the repo
 Open the index.html file with your browser of choice.
 
 ## Live Demo 
-The Project can be viewed [here](#)
+The Project can be viewed [here](https://kennankole.github.io/to-do-list-app/dist/)
 
 ## Author
 
