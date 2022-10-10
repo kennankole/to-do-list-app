@@ -1,6 +1,6 @@
 # My To Do List
 
-> This a to do list web app that allows you to add and remove tasks from the to do list.
+> My To Do List web app is a simple to-do list application where users can add, update, view, and remove to-do list tasks on the list. The applicaiton is built with Jvascript. 
 
 
 ## Built With
